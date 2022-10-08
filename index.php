@@ -1,7 +1,4 @@
-
-
 <!-- # TECH TEST
-
 ## Obiettivo
 Verificare che un anagramma di una stringa sia contenuto in un'altra stringa.
 
@@ -27,59 +24,89 @@ Date due stringhe A = "abc" e B = "itookablackcab" lo script stamperà a video
 stringa B. -->
 
 <?php 
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
-// 2.a - $needle sia una stringa di lunghezza massima di 1024 caratteri -> case1(se la stringa è superiore a 1024 false).
-// 3.a - $haystack sia una stringa di lunghezza massima di 1024 caratteri.
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-function anagramma($needle, $haystack) {
+function anagramma($needle) {
+    // return 'TRUE - go ahead';
+    $maxCombination = possbileCombination($needle);
+    $needleArr = [];
+    //se la stringa non è presente aggiungila
+    while( count($needleArr) < $maxCombination ) {
+        if(!in_array($needle, $needleArr)) {
+            $needleArr[] = str_shuffle($needle);
+        }
+    }
+    return $needleArr;
+}
+// anagramma("farmacia");
+// echo possbileCombination("skuola"); //return a number ok
 
-    // - Il controllo sia case-insensitive.
+function searchInstring($needle, $haystack) {
+    //- Il controllo sia case-insensitive.
     $needle = strtolower($needle);
     $haystack = strtolower($haystack);
 
-    // FORSE DEVO TOGLIERE TUTTI I CARATTERI SPECIALI . , / E LASCIARE SOLO LETTERE
-
-    // se la stringa è superiore a 1024 false da mettere a 1024
+    // se la stringa è superiore a 1024 false
     if(strlen($needle) > 1024 || strlen($haystack) > 1024) {
-       return 'FALSE - too long';
+        return 'FALSE - too long';
     } else {
+        $anagrams = anagramma($needle);
+        print_r($anagrams);
+        foreach ($anagrams as $anagram) {
+            if (strpos($haystack, $anagram) !== FALSE) {
+                echo "true"; 
+                return true;
+            }
+        }
+        echo "Not found!";
+        return false;
+    }
+}
+searchInstring("abc", "itookacab");
+
+
+// printCharMostRepeated return a letter or an array
+function printCharMostRepeated($needle) {
+    if (!empty($needle)) {
+        $max = 0;
+        foreach (count_chars($needle, 1) as $key => $val)
+            if ($max < $val) {
+                $max = $val;
+                $i = 0;
+                unset($letter);
+                $letter[$i++] = chr($key);
+            } else if ($max == $val)
+                $letter[$i++] = chr($key);
+        if (count($letter) === 1){
+            'The character the most repeated is "'.$letter[0].'"';
+            return $letter[0];
+        }else if (count($letter) > 1) {
+            'The characters the most repeated are : ';
+            $count = count($letter);
+            $arrRepetedChar = array();
+            foreach ($letter as $key => $value) {
+                $countedLetter = substr_count($needle, $value);
+                $arrRepetedChar[] = $countedLetter;
+                //echo '"'.$value.'"';
+                //echo ($key === $count - 1) ? '.': ', ';
+            }
+            return $arrRepetedChar; //genero la parte sotto della divisione es: 2!.2!
+        }
+    } else {
+        echo 'value passed to '.__FUNCTION__.' can\'t be empty';
+    }
+}
+
+//possbileCombination return a number
+
+function possbileCombination($needle) {
+
         // return 'TRUE - go ahead';
         $fullStringLength = strlen($needle);
         $singleCharLength = strlen(count_chars($needle, 3));
         
-        function printCharMostRepeated($needle) {
-            if (!empty($needle))
-            {
-                $max = 0;
-                foreach (count_chars($needle, 1) as $key => $val)
-                    if ($max < $val) {
-                        $max = $val;
-                        $i = 0;
-                        unset($letter);
-                        $letter[$i++] = chr($key);
-                    } else if ($max == $val)
-                        $letter[$i++] = chr($key);
-                if (count($letter) === 1){
-                    'The character the most repeated is "'.$letter[0].'"';
-                    return $letter[0];
-                }else if (count($letter) > 1) {
-                    'The characters the most repeated are : ';
-                    $count = count($letter);
-                    $arrRepetedChar = array();
-                    foreach ($letter as $key => $value) {
-                        $countedLetter = substr_count($needle, $value);
-                        $arrRepetedChar[] = $countedLetter;
-                        //echo '"'.$value.'"';
-                        //echo ($key === $count - 1) ? '.': ', ';
-                    }
-                    return $arrRepetedChar; //genero la parte sotto della divisione es: 2!.2!
-                }
-            } else {
-                echo 'value passed to '.__FUNCTION__.' can\'t be empty';
-            }
-        }
         $letters = printCharMostRepeated($needle);
 
         // $letter è un array vuol dire che ci sono 2 o + lettere ripetute else una lettera ripetuta molte volte
@@ -97,7 +124,7 @@ function anagramma($needle, $haystack) {
             $fattorialeBottom;
             $fattorialeTop = fattoriale($fullStringLength);
             $resultFattoriale = $fattorialeTop/$fattorialeBottom;
-            return $resultFattoriale.'pippo'; //return da levare
+            return $resultFattoriale; //return da levare
         } else {
             $countOfRepeatedChar = substr_count($needle, $letters) + 1; //aggiungo uno per far partire il fattoriale dall'indice giusto nel caso sono tutte diverse l'indice è già uno (per il +1)
             function fattorialeSimple($countOfRepeatedChar, $fullStringLength){
@@ -105,20 +132,10 @@ function anagramma($needle, $haystack) {
                 for ($i=$countOfRepeatedChar; $i<=$fullStringLength; $i++) {
                     $res=$res*$i;
                 }
-                return $res.'pluto';
+                return $res;
             }
             $resultFattorialeSimplified = fattorialeSimple($countOfRepeatedChar, $fullStringLength);
             return $resultFattorialeSimplified; //return da levare
         }
-        
-
-        // $needleArr = [];
-        //se la stringa non è presente aggiungila
-        // while(!in_array($needle, $needleArr)) {
-        //     $needleArr[] = str_shuffle($needle);
-        // }
-        // return $needleArr;
     }
-}
 
-echo anagramma("farmacia", "pippo");

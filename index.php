@@ -82,24 +82,33 @@ function anagramma($needle, $haystack) {
         }
         $letters = printCharMostRepeated($needle);
 
-        function fattoriale($countOfRepeatedChar, $fullStringLength){
-            $res = 1;
-            for ($i=$countOfRepeatedChar; $i<=$fullStringLength; $i++) {
-                 $res=$res*$i;
-            }
-            echo $res;
-        }
-
         // $letter è un array vuol dire che ci sono 2 o + lettere ripetute else una lettera ripetuta molte volte
         if(is_array($letters)) {
             //print_r($letters); //output Array ( [0] => 2 [1] => 2 )
-            echo 'sono qui';
-            foreach ($letters as $key => $countedLetter) {
-                fattoriale($countedLetter, $fullStringLength);
+            function fattoriale($num){
+                $res = 1;
+                for ($i=1;$i<=$num;$i++) $res=$res*$i;
+                return $res;
             }
+            foreach ($letters as $key => $countedLetter) {
+                $fattorialeTemp = fattoriale($countedLetter);
+                $fattorialeBottom = $fattorialeTemp*$fattorialeTemp;
+            }
+            $fattorialeBottom;
+            $fattorialeTop = fattoriale($fullStringLength);
+            $resultFattoriale = $fattorialeTop/$fattorialeBottom;
+            return $resultFattoriale.'pippo'; //return da levare
         } else {
             $countOfRepeatedChar = substr_count($needle, $letters) + 1; //aggiungo uno per far partire il fattoriale dall'indice giusto nel caso sono tutte diverse l'indice è già uno (per il +1)
-            fattoriale($countOfRepeatedChar, $fullStringLength);
+            function fattorialeSimple($countOfRepeatedChar, $fullStringLength){
+                $res = 1;
+                for ($i=$countOfRepeatedChar; $i<=$fullStringLength; $i++) {
+                    $res=$res*$i;
+                }
+                return $res.'pluto';
+            }
+            $resultFattorialeSimplified = fattorialeSimple($countOfRepeatedChar, $fullStringLength);
+            return $resultFattorialeSimplified; //return da levare
         }
         
 
@@ -112,4 +121,4 @@ function anagramma($needle, $haystack) {
     }
 }
 
-echo anagramma("otto", "pippo");
+echo anagramma("farmacia", "pippo");

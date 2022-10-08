@@ -27,9 +27,9 @@ Date due stringhe A = "abc" e B = "itookablackcab" lo script stamperà a video
 stringa B. -->
 
 <?php 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 // 2.a - $needle sia una stringa di lunghezza massima di 1024 caratteri -> case1(se la stringa è superiore a 1024 false).
 // 3.a - $haystack sia una stringa di lunghezza massima di 1024 caratteri.
 
